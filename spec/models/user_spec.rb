@@ -26,22 +26,22 @@ describe User do
   
 
      describe "email address with mixed case" do
-	let(:mixed_case_email) { "Foo@Example.Com" }
+	            let(:mixed_case_email) { "Foo@Example.Com" }
  	
-	it "should not be mixed case email" do    	
-        	@user.email = mixed_case_email
-        	@user.save
+              	it "should not be mixed case email" do    	
+                	@user.email = mixed_case_email
+        	        @user.save
 		
-		@user.email.should == mixed_case_email.downcase
-	end
-	#saved_email = @user.email
-	#saved_email.should == mixed_case_email.downcase
-	#it "should be saved as all lower case" do
-	 # @user.email = mixed_case_email
-	 # @user.save
-	  #@user.reload.email.should == mixed_case_email.downcase
+	               	@user.email.should == mixed_case_email.downcase
+                 end
+                    	#saved_email = @user.email
+	                    #saved_email.should == mixed_case_email.downcase
+	                    #it "should be saved as all lower case" do
+	                    # @user.email = mixed_case_email
+	                    # @user.save
+	                    #@user.reload.email.should == mixed_case_email.downcase
 	   	
- 	#end
+ 	                    #end
 	
      end
 
