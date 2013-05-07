@@ -39,8 +39,10 @@ group :development, :test do
   gem 'pry'
   gem 'client_side_validations'
   gem 'sqlite3'
-  #gem 'devise'
+  gem 'faker', '1.0.1'
   #gem 'google-analytics-rails'
+  gem 'will_paginate', '3.0.3'
+  gem 'bootstrap-will_paginate', '0.0.6'
 end
 
 group :test do

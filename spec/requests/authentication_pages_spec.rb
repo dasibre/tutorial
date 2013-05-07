@@ -12,10 +12,37 @@ describe "AthenticationPages" do
          end
          
          describe "authorization" do
+                  
+                  describe "as a non-admin user" do
+                           let(:user) { FactoryGirl.create(:user) }
+                           let (:non_admin) { FactoryGirl.create(:user) }
+                           
+                           before { sign_in non_admin }
+                           describe "submitting delete request to Users#destroy action" do
+                                    before { delete user_path(user) }
+                                    it { should redirect_to(root_path) }
+                           end
+                  end
                   describe "for non-signed in users" do
                            let(:user) { FactoryGirl.create(:user) }
                            
+                           describe "When trying to visit a proected page" do
+                                    before do
+                                           visit edit_user_path(user)
+                                           sign_in(user)
+                                    end
+                                    
+                                    describe "after sign in" do
+                                           
+                                           it { should have_selector('h1', text: "Update your profile")}
+                                           it { should have_title_tag(full_title("Edit user")) }
+                                    end
+                           end
                            describe "in the Users controller" do
+                                    describe "when visiting user index" do
+                                          before { visit users_path }
+                                           it { should have_title_tag("Sign in") }
+                                    end
                                     describe "visiting the edit page" do
                                              before { visit edit_user_path(user) }
                                              it { should have_selector('title', text: "Sign in") }
@@ -24,6 +51,24 @@ describe "AthenticationPages" do
                                              before { put user_path(user) }
                                              specify { response.should redirect_to(signin_path) }
                                     end
+                           end
+                  end
+                  
+                  describe "as wrong user" do
+                           let(:user) { FactoryGirl.create(:user) }
+                           let (:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
+                           before { sign_in(user) }
+                           
+                           describe "visiting User#edit page" do
+                                    before { visit edit_user_path(wrong_user) }
+                                    
+                                    it { should_not have_title_tag(full_title("Edit user"))}
+                                    it { should have_content("Welcome")}
+                           end
+                           
+                           describe "submitting to Update action" do
+                                    before { put user_path(wrong_user) }
+                                    specify { response.should redirect_to(root_path) }
                            end
                   end
          end
@@ -51,6 +96,7 @@ describe "AthenticationPages" do
                    end
 
                    it { should have_selector('title', text: user.name) }
+                   it { should have_link('Users', href: users_path) }
                    it { should have_link('Profile', href: user_path(user)) }
                    it { should have_link('Settings', href: edit_user_path(user)) }
                    it { should have_link('Sign out', href: signout_path) }
