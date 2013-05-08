@@ -46,19 +46,19 @@ describe "UserPages" do
                        end
               end
            end
-  end
-  describe "edit" do
-    let(:user) { FactoryGirl.create(:user) }
-     before do
-       sign_in(user)
-       visit edit_user_path(user) 
-     end
-           describe "edit user page" do
-                    it { should have_selector('h1',    text: "Update your profile") }
-                    it { should have_selector('title', text: "Edit user") }
-                    it { should have_title_tag("Edit user") }
-                    it { should have_link('change', href: 'http://gravatar.com/emails') }
-           end
+        end
+               describe "edit" do
+                         let(:user) { FactoryGirl.create(:user) }
+                                      before do
+                                                sign_in(user)
+                                                visit edit_user_path(user) 
+                                      end
+                                   describe "edit user page" do
+                                    it { should have_selector('h1',    text: "Update your profile") }
+                                    it { should have_selector('title', text: "Edit user") }
+                                    it { should have_title_tag("Edit user") }
+                                    it { should have_link('change', href: 'http://gravatar.com/emails') }
+                                   end
            
             describe "with valid information" do
                     let(:new_name)  { "New Name" }

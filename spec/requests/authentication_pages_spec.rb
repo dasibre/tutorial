@@ -12,16 +12,42 @@ describe "AthenticationPages" do
          end
          
          describe "authorization" do
-                  
+         
+                  describe "delete request for admin user" do
+                                    let(:admin) { FactoryGirl.create(:admin) }
+                                    
+                                    before do
+                                           sign_in(admin)
+                                           delete user_path(admin)
+                                    end
+                                    
+                                    it { should redirect_to(users_path) }
+                    end
+         
+                  describe "visiting sign up page for signed in users" do
+                           let(:user) { FactoryGirl.create(:user) }
+                           before do
+                                  sign_in(user)
+                                  visit signup_path
+                           end 
+                           
+                           it { should have_selector('h1', text: "Welcome") }
+                           
+                            it "should redirect to root path" do
+                               post "/users"
+                               expect { response.should redirect_to(root_path) }
+                            end
+                  end
                   describe "as a non-admin user" do
                            let(:user) { FactoryGirl.create(:user) }
                            let (:non_admin) { FactoryGirl.create(:user) }
                            
                            before { sign_in non_admin }
-                           describe "submitting delete request to Users#destroy action" do
+                                  describe "submitting delete request to Users#destroy action" do
                                     before { delete user_path(user) }
                                     it { should redirect_to(root_path) }
-                           end
+                                  end
+                           
                   end
                   describe "for non-signed in users" do
                            let(:user) { FactoryGirl.create(:user) }
@@ -37,7 +63,21 @@ describe "AthenticationPages" do
                                            it { should have_selector('h1', text: "Update your profile")}
                                            it { should have_title_tag(full_title("Edit user")) }
                                     end
+                                    
+                                    describe "when sining in again" do
+                                             before do
+                                               click_link "Sign out" 
+                                               sign_in(user)
+                                              end
+                                              
+                                              it "should render the default profile page" do
+                                                 page.should have_title_tag(user.name)
+                                              end
+                                             
+                                    end
                            end
+                           
+                          
                            describe "in the Users controller" do
                                     describe "when visiting user index" do
                                           before { visit users_path }
@@ -89,11 +129,7 @@ describe "AthenticationPages" do
                   
                describe "with valid information" do
                    let(:user) { FactoryGirl.create(:user) }
-                   before do
-                          fill_in "Email",    with: user.email.upcase
-                          fill_in "Password", with: user.password
-                          click_button "Sign in"
-                   end
+                   before { sign_in(user) }
 
                    it { should have_selector('title', text: user.name) }
                    it { should have_link('Users', href: users_path) }
