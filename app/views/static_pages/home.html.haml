@@ -1,5 +1,4 @@
-.center.hero-unit
-  %h1 Welcome To Rails Tutorial App
-  %h2 This is the home page for the Ruby on Rails Tutorial application
-  = link_to "Sign up now", 'signup', class: "btn btn-large btn-primary"
-= link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/'
+- if signed_in?
+  = render 'signed_in'
+- else
+  = render 'welcome_view'

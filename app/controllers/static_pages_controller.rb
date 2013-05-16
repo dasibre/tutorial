@@ -1,10 +1,10 @@
 class StaticPagesController < ApplicationController
   def home
-	#@title = 'Home'
+	 @micropost = current_user.microposts.build if signed_in?
   end
 
   def help
-	#@title = 'Help'
+	  
   end
 
   def about

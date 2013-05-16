@@ -43,6 +43,8 @@ group :development, :test do
   #gem 'google-analytics-rails'
   gem 'will_paginate', '3.0.3'
   gem 'bootstrap-will_paginate', '0.0.6'
+  gem 'binding_of_caller'
+  gem 'meta_request'
 end
 
 group :test do

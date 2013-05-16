@@ -17,6 +17,12 @@ module SessionsHelper
            user == current_user
        end
        
+       def authorize
+            unless signed_in?
+              store_location
+              redirect_to signin_url, notice: "Please sign in"
+            end
+       end
        def signed_in?
            !current_user.nil?
        end
@@ -34,4 +40,6 @@ module SessionsHelper
            redirect_to(session[:return_to] || default ) 
            session.delete(:return_to)
        end
+       
+      
 end

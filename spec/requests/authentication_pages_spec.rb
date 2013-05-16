@@ -12,7 +12,6 @@ describe "AthenticationPages" do
          end
          
          describe "authorization" do
-         
                   describe "delete request for admin user" do
                                     let(:admin) { FactoryGirl.create(:admin) }
                                     
@@ -31,7 +30,7 @@ describe "AthenticationPages" do
                                   visit signup_path
                            end 
                            
-                           it { should have_selector('h1', text: "Welcome") }
+                           it { should have_content("Please logout") }
                            
                             it "should redirect to root path" do
                                post "/users"
@@ -52,6 +51,20 @@ describe "AthenticationPages" do
                   describe "for non-signed in users" do
                            let(:user) { FactoryGirl.create(:user) }
                            
+                           describe "in the Microposts controller" do
+                               
+                               describe "when submitting to create action" do
+                                 before { post microposts_path }
+                                 specify { response.should redirect_to(signin_path) }
+                               end
+                               
+                               describe "when submitting to destroy action" do
+                                 before { delete micropost_path(FactoryGirl.create(:micropost)) }
+                                 specify { response.should redirect_to(signin_path) }
+                               end
+                           
+                           
+                            end
                            describe "When trying to visit a proected page" do
                                     before do
                                            visit edit_user_path(user)
@@ -103,7 +116,7 @@ describe "AthenticationPages" do
                                     before { visit edit_user_path(wrong_user) }
                                     
                                     it { should_not have_title_tag(full_title("Edit user"))}
-                                    it { should have_content("Welcome")}
+                                    it { should have_selector("h1", text: user.name)}
                            end
                            
                            describe "submitting to Update action" do

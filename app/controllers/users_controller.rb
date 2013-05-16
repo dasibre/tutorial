@@ -53,14 +53,9 @@ class UsersController < ApplicationController
            redirect_to users_url
        end
    end
+   
    private
    
-   def authorize
-       unless signed_in?
-              store_location
-              redirect_to signin_url, notice: "Please sign in"
-       end
-   end
    
    def correct_user
       @user = User.find(params[:id])

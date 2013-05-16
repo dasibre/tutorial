@@ -10,7 +10,7 @@
       %h3
         Microposts (#{@user.microposts.count})
       %ol.microposts
-        = render @microposts
+        = render @microposts #renders the micropost partial
         = will_paginate @microposts   
        
             
