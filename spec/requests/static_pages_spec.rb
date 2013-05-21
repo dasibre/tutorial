@@ -28,11 +28,27 @@ describe "StaticPages" do
 
   describe "Home page" do
           before { visit root_path }
-	  let (:heading) { "Welcome To" }
-	  let (:page_title) { "" }
+	        let (:heading) { "Welcome to" }
+	        let (:page_title) { "" }
           it_should_behave_like "all static pages"
           #it {should have_selector('title', :text => "#{base_title}" ) }
           it { should_not have_selector('title', :text => "| Home" ) }
+          
+          describe "for signed-in users" do
+            let(:user) { FactoryGirl.create(:user) }
+            before do
+                    FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
+                    FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
+                    sign_in(user)
+                    visit root_path
+            end
+            
+            it "should render the user's feed" do
+               user.feed.each do |item|
+                 page.should have_selector("li##{item.id}", text: item.content)
+               end
+            end
+          end
     
   end
   
