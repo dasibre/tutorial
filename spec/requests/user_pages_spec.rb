@@ -31,7 +31,25 @@ describe "UserPages" do
            
            it { should have_title_tag("All users") }
            it { should have_selector('h1', text: "All users") }
-           
+              
+              
+              describe "micropost pagination" do
+                    let(:user) { FactoryGirl.create(:user) }
+                    before do
+                           sign_in(user)
+                           40.times { FactoryGirl.create(:micropost, user: user, content: "lorum ipsum") }
+                           visit root_path
+                           
+                    end
+  
+                     it { should have_selector('div.pagination') }
+                    
+                     it "Should list each micropost" do
+                        Micropost.paginate(page: 1).each do |item|
+                          page.should have_selector('li', text: item.content)
+                       end
+                     end
+              end
                describe "pagination" do
                     before(:all) { 30.times { FactoryGirl.create(:user) } }
                     after(:all)  { User.delete_all }
